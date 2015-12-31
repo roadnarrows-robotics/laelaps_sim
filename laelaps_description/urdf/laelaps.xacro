@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!-- Laelaps Simulation -->
+<robot name="laelaps" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!-- Constants for robot dimensions -->
+  <xacro:property name="PI" value="3.1415926535897931"/>
+  <xacro:property name="body_mass" value="10"/> <!-- mass of laelaps' body -->
+  <xacro:property name="body_width" value="0.042"/>
+  <xacro:property name="body_length" value="0.035"/>
+  <xacro:property name="body_height" value="0.010"/>
+
+  <!-- Import Rviz colors -->
+  <xacro:include filename="$(find laelaps_description)/urdf/materials.xacro" />
+
+  <!-- Body Link -->
+  <link name="body">
+    <visual>
+      <origin xyz="0 0 ${body_height/2}" rpy="0 0 0"/>
+      <geometry>
+        <box size="${body_length} ${body_width} ${body_height}"/>
+      </geometry>
+      <material name="orange"/>
+    </visual>
+    <inertial>
+      <origin xyz="0 0 ${body_height/2}" rpy="0 0 0"/>
+      <mass value="${body_mass}"/>
+      <inertia
+          ixx="${body_mass/12.0 * (body_width*body_width + body_height*body_height)}" ixy="0.0" ixz="0.0"
+          iyy="${body_mass/12.0 * (body_height*body_height + body_length*body_length)}" iyz="0.0"
+          izz="${body_mass/12.0 * (body_width*body_width + body_length*body_length)}"/>
+    </inertial>
+  </link>
+</robot>
