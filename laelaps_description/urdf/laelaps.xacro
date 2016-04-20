@@ -3,30 +3,88 @@
 <robot name="laelaps" xmlns:xacro="http://www.ros.org/wiki/xacro">
   <!-- Constants for robot dimensions -->
   <xacro:property name="PI" value="3.1415926535897931"/>
-  <xacro:property name="body_mass" value="10"/> <!-- mass of laelaps' body -->
-  <xacro:property name="body_width" value="0.042"/>
-  <xacro:property name="body_length" value="0.035"/>
-  <xacro:property name="body_height" value="0.010"/>
+  <xacro:property name="body_mass" value="35"/> <!-- mass of laelaps' body -->
+  <xacro:property name="body_width" value="0.5"/> <!-- sizeY of body-->
+  <xacro:property name="body_length" value="1.0"/> <!-- sizeX of body -->
+  <xacro:property name="body_height" value="0.25"/> <!-- sizeZ of body -->
 
   <!-- Import Rviz colors -->
   <xacro:include filename="$(find laelaps_description)/urdf/materials.xacro" />
+  <xacro:include filename="$(find laelaps_description)/urdf/laelaps_wheel.xacro" />
+  <!-- BASE-FOOTPRINT -->
+  <link name="base_footprint">
+    <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+            <box size="0.001 0.001 0.001" />
+        </geometry>
+    </visual>
+  </link>
+  <gazebo reference="base_footprint">
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
 
+  <joint name="base_footprint_joint" type="fixed">
+    <origin xyz="0 0 ${body_height/2}" rpy="0 0 0" />
+    <parent link="base_footprint"/>
+    <child link="base_link" />
+  </joint>
   <!-- Body Link -->
-  <link name="body">
+  <link name="base_link">
     <visual>
       <origin xyz="0 0 ${body_height/2}" rpy="0 0 0"/>
       <geometry>
         <box size="${body_length} ${body_width} ${body_height}"/>
+        <!-- <mesh filename="package://laelaps_description/meshes/RN-LL-303-R01_scaled_compressed.stl"/>-->
       </geometry>
       <material name="orange"/>
     </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="${body_length} ${body_width} ${body_height}"/>
+      </geometry>
+    </collision>
     <inertial>
-      <origin xyz="0 0 ${body_height/2}" rpy="0 0 0"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
       <mass value="${body_mass}"/>
       <inertia
-          ixx="${body_mass/12.0 * (body_width*body_width + body_height*body_height)}" ixy="0.0" ixz="0.0"
-          iyy="${body_mass/12.0 * (body_height*body_height + body_length*body_length)}" iyz="0.0"
-          izz="${body_mass/12.0 * (body_width*body_width + body_length*body_length)}"/>
+          ixx="${(body_mass/12.0) * (body_width*body_width + body_height*body_height)}" ixy="0.0" ixz="0.0"
+          iyy="${(body_mass/12.0) * (body_height*body_height + body_length*body_length)}" iyz="0.0"
+          izz="${(body_mass/12.0) * (body_width*body_width + body_length*body_length)}"/>
     </inertial>
   </link>
+  <gazebo reference="base_link">
+    <material>Gazebo/Yellow</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <!-- Wheels -->
+  <laelaps_wheel fb="front" lr="right" parent="base_link" translateX="1" translateY="-1" flipY="-1"/>
+  <laelaps_wheel fb="front" lr="left" parent="base_link" translateX="1" translateY="1" flipY="-1"/>
+  <laelaps_wheel fb="back" lr="right" parent="base_link" translateX="-1" translateY="-1" flipY="-1"/>
+  <laelaps_wheel fb="back" lr="left" parent="base_link" translateX="-1" translateY="1" flipY="-1"/>
+  <gazebo>
+    <plugin name="skid_steer_drive_controller" filename="libgazebo_ros_skid_steer_drive.so">
+      <alwaysOn>true</alwaysOn>
+      <updateRate>100.0</updateRate>
+      <leftFrontJoint>front_left_wheel_joint</leftFrontJoint>
+      <rightFrontJoint>front_right_wheel_joint</rightFrontJoint>
+      <leftRearJoint>back_left_wheel_joint</leftRearJoint>
+      <rightRearJoint>back_right_wheel_joint</rightRearJoint>
+      <wheelSeparation>${body_width}</wheelSeparation>
+      <wheelDiameter>${2*wheel_radius}</wheelDiameter>
+      <torque>1</torque>
+      <broadcastTF>1</broadcastTF>
+      <odometryFrame>map</odometryFrame>
+      <commandTopic>cmd_vel</commandTopic>
+      <odometryTopic>odom</odometryTopic>
+      <robotBaseFrame>base_link</robotBaseFrame>
+    </plugin>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so" />
+  </gazebo>
+  <gazebo>
+  <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+    <robotNamespace>/laelaps</robotNamespace>
+  </plugin>
+</gazebo>
 </robot>
