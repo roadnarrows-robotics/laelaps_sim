@@ -4,12 +4,13 @@
   <!-- Constants for robot dimensions -->
   <xacro:property name="PI" value="3.1415926535897931"/>
   <xacro:property name="body_mass" value="35"/> <!-- mass of laelaps' body -->
-  <xacro:property name="body_width" value="0.5"/> <!-- sizeY of body-->
-  <xacro:property name="body_length" value="1.0"/> <!-- sizeX of body -->
-  <xacro:property name="body_height" value="0.25"/> <!-- sizeZ of body -->
+  <xacro:property name="body_width" value="0.25"/> <!-- sizeY of body-->
+  <xacro:property name="body_length" value="0.35"/> <!-- sizeX of body -->
+  <xacro:property name="body_height" value="0.10"/> <!-- sizeZ of body -->
+  <xacro:property name="body_z_offset" value="0.09"/> <!-- body ground clearance -->
 
   <!-- Import Rviz colors -->
-  <xacro:include filename="$(find laelaps_description)/urdf/materials.xacro" />
+  <!-- <xacro:include filename="$(find laelaps_description)/urdf/materials.xacro" />-->
   <xacro:include filename="$(find laelaps_description)/urdf/laelaps_wheel.xacro" />
   <!-- BASE-FOOTPRINT -->
   <link name="base_footprint">
@@ -21,23 +22,24 @@
     </visual>
   </link>
   <gazebo reference="base_footprint">
+    <material>Gazebo/Yellow</material>
     <turnGravityOff>false</turnGravityOff>
   </gazebo>
 
   <joint name="base_footprint_joint" type="fixed">
-    <origin xyz="0 0 ${body_height/2}" rpy="0 0 0" />
+    <origin xyz="0 0 ${body_z_offset}" rpy="0 0 0" />
     <parent link="base_footprint"/>
     <child link="base_link" />
   </joint>
   <!-- Body Link -->
   <link name="base_link">
     <visual>
-      <origin xyz="0 0 ${body_height/2}" rpy="0 0 0"/>
+      <origin xyz="0 0 ${body_z_offset}" rpy="0 0 0"/>
       <geometry>
-        <box size="${body_length} ${body_width} ${body_height}"/>
-        <!-- <mesh filename="package://laelaps_description/meshes/RN-LL-303-R01_scaled_compressed.stl"/>-->
+        <!-- <box size="${body_length} ${body_width} ${body_height}"/>-->
+        <mesh filename="package://laelaps_description/meshes/RN-LL-303-R01_scaled.stl"/>
       </geometry>
-      <material name="orange"/>
+      <material name="DarkGrey"/>
     </visual>
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -55,13 +57,13 @@
     </inertial>
   </link>
   <gazebo reference="base_link">
-    <material>Gazebo/Yellow</material>
-    <turnGravityOff>false</turnGravityOff>
+    <material>Gazebo/DarkGrey</material>
   </gazebo>
+
   <!-- Wheels -->
-  <laelaps_wheel fb="front" lr="right" parent="base_link" translateX="1" translateY="-1" flipY="-1"/>
+  <laelaps_wheel fb="front" lr="right" parent="base_link" translateX="1" translateY="-1" flipY="1"/>
   <laelaps_wheel fb="front" lr="left" parent="base_link" translateX="1" translateY="1" flipY="-1"/>
-  <laelaps_wheel fb="back" lr="right" parent="base_link" translateX="-1" translateY="-1" flipY="-1"/>
+  <laelaps_wheel fb="back" lr="right" parent="base_link" translateX="-1" translateY="-1" flipY="1"/>
   <laelaps_wheel fb="back" lr="left" parent="base_link" translateX="-1" translateY="1" flipY="-1"/>
   <gazebo>
     <plugin name="skid_steer_drive_controller" filename="libgazebo_ros_skid_steer_drive.so">
@@ -80,11 +82,11 @@
       <odometryTopic>odom</odometryTopic>
       <robotBaseFrame>base_link</robotBaseFrame>
     </plugin>
-    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so" />
+    <!-- <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so" />-->
   </gazebo>
   <gazebo>
-  <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-    <robotNamespace>/laelaps</robotNamespace>
-  </plugin>
-</gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/laelaps</robotNamespace>
+    </plugin>
+  </gazebo>
 </robot>
