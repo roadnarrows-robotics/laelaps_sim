@@ -9,10 +9,13 @@
   <xacro:property name="body_height" value="0.10"/> <!-- sizeZ of body -->
   <xacro:property name="body_z_offset" value="0.09"/> <!-- body ground clearance -->
   <xacro:property name="camera_link" value="0.02"/> <!-- camera box size -->
+  <xacro:property name="laser_y_offset" value="0.063"/> <!-- distance from centerline to laser-->
+  <xacro:property name="laser_yaw" value="${15*(PI/180)}"/>
 
   <!-- Import Rviz colors -->
   <!-- <xacro:include filename="$(find laelaps_description)/urdf/materials.xacro" />-->
   <xacro:include filename="$(find laelaps_description)/urdf/laelaps_wheel.xacro" />
+  <xacro:include filename="$(find laelaps_description)/urdf/laelaps_laser.xacro" />
   <!-- BASE-FOOTPRINT -->
   <link name="base_footprint">
     <visual>
@@ -131,63 +134,10 @@
       </plugin>
     </sensor>
   </gazebo>
-  <joint name="hokuyo_joint" type="fixed">
-    <axis xyz="0 1 0"/>
-    <origin xyz="${body_length/2} 0 ${body_height/2}" rpy="0 0 0"/>
-    <parent link="base_link"/>
-    <child link="hokuyo_link"/>
-  </joint>
-  <!--Hokuyo laser -->
-  <link name="hokuyo_link">
-    <collision>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <geometry>
-        <box size="0.001 0.001 0.001"/>
-      </geometry>
-    </collision>
-    <visual>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <geometry>
-        <box size="0.001 0.001 0.001"/>
-      </geometry>
-    </visual>
-    <inertial>
-      <mass value="1e-5"/>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
-    </inertial>
-  </link>
-  <gazebo reference="hokuyo_link">
-    <sensor type="ray" name="head_hokuyo_sensor">
-      <pose>0 0 0 0 0 0</pose>
-      <visualize>true</visualize>
-      <update_rate>20</update_rate>
-      <ray>
-        <scan>
-          <horizontal>
-            <samples>720</samples>
-            <resolution>1</resolution>
-            <min_angle>-0.2618</min_angle>
-            <max_angle>0.2618</max_angle>
-          </horizontal>
-        </scan>
-        <range>
-          <min>0.05</min>
-          <max>0.20</max>
-          <resolution>0.01</resolution>
-        </range>
-        <noise>
-          <type>gaussian</type>
-          <mean>0.0</mean>
-          <stddev>0.01</stddev>
-        </noise>
-      </ray>
-      <plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_laser.so">
-        <topicName>/laelaps/laser/scan</topicName>
-        <frameName>hokuyo_link</frameName>
-      </plugin>
-    </sensor>
-  </gazebo>
+  <!-- Lasers -->
+  <laelaps_laser index="0" parent="base_link" translateX="${body_length/2}" translateY="0" translateZ="${body_height/2}" yaw="0"/>
+  <laelaps_laser index="1" parent="base_link" translateX="${body_length/2}" translateY="-${laser_y_offset}" translateZ="${body_height/2}" yaw="-${laser_yaw}"/>
+  <laelaps_laser index="7" parent="base_link" translateX="${body_length/2}" translateY="${laser_y_offset}" translateZ="${body_height/2}" yaw="${laser_yaw}"/>
   <gazebo>
     <plugin name="skid_steer_drive_controller" filename="libgazebo_ros_skid_steer_drive.so">
       <alwaysOn>true</alwaysOn>
