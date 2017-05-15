@@ -17,6 +17,7 @@
   <xacro:include filename="$(find laelaps_description)/urdf/laelaps_wheel.xacro" />
   <xacro:include filename="$(find laelaps_description)/urdf/laelaps_laser.xacro" />
   <xacro:include filename="$(find laelaps_description)/urdf/laelaps_camera.xacro" />
+  <xacro:include filename="$(find laelaps_description)/urdf/laelaps_imu.xacro" />
   <!-- BASE-FOOTPRINT -->
   <link name="base_footprint">
     <visual>
@@ -76,7 +77,8 @@
   <laelaps_laser index="0" parent="base_link" translateX="${body_length/2}" translateY="0" translateZ="${body_height/2}" yaw="0"/>
   <laelaps_laser index="1" parent="base_link" translateX="${body_length/2}" translateY="-${laser_y_offset}" translateZ="${body_height/2}" yaw="-${laser_yaw}"/>
   <laelaps_laser index="7" parent="base_link" translateX="${body_length/2}" translateY="${laser_y_offset}" translateZ="${body_height/2}" yaw="${laser_yaw}"/>
-  
+  <!-- IMU -->
+  <laelaps_imu index="0" parent="base_link" translateX="0" translateY="0" translateZ="0"/>
   <!-- Drivetrain -->
   <gazebo>
     <plugin name="skid_steer_drive_controller" filename="libgazebo_ros_skid_steer_drive.so">
