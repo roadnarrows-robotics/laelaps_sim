@@ -21,8 +21,8 @@
       <visual>
         <origin xyz="0 0 0" rpy="${flipY*PI/2} 0 0"/>
         <geometry>
-          <mesh filename="package://laelaps_description/meshes/wheel_with_rim.stl"/>
-          <!-- <cylinder length="${wheel_height}" radius="${wheel_radius}"/> -->
+          <!--<mesh filename="package://laelaps_description/meshes/wheel_with_rim.stl"/>-->
+          <cylinder length="${wheel_height}" radius="${wheel_radius}"/>
         </geometry>
         <material name="DarkGray"/>
       </visual>
@@ -59,10 +59,10 @@
     <transmission name="${fb}_${lr}_wheel_joint_trans">
       <type>transmission_interface/SimpleTransmission</type>
       <joint name="${fb}_${lr}_wheel_joint">
-        <hardwareInterface>EffortJointInterface</hardwareInterface>
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
       </joint>
       <actuator name="${fb}_${lr}_wheel_joint_motor">
-        <hardwareInterface>EffortJointInterface</hardwareInterface>
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
         <mechanicalReduction>1</mechanicalReduction>
       </actuator>
     </transmission>

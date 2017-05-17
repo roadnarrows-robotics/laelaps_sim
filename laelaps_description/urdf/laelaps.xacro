@@ -42,8 +42,8 @@
     <visual>
       <origin xyz="0 0 ${body_z_offset}" rpy="0 0 0"/>
       <geometry>
-        <!-- <box size="${body_length} ${body_width} ${body_height}"/>-->
-        <mesh filename="package://laelaps_description/meshes/RN-LL-303-R01_scaled.stl"/>
+        <box size="${body_length} ${body_width} ${body_height}"/>
+        <!--<mesh filename="package://laelaps_description/meshes/RN-LL-303-R01_scaled.stl"/>-->
       </geometry>
       <material name="DarkGrey"/>
     </visual>
@@ -82,6 +82,7 @@
   <!-- Drivetrain -->
   <gazebo>
     <plugin name="skid_steer_drive_controller" filename="libgazebo_ros_skid_steer_drive.so">
+      <robotNamespace>/laelaps</robotNamespace>
       <alwaysOn>true</alwaysOn>
       <updateRate>100.0</updateRate>
       <leftFrontJoint>front_left_wheel_joint</leftFrontJoint>
@@ -90,7 +91,7 @@
       <rightRearJoint>back_right_wheel_joint</rightRearJoint>
       <wheelSeparation>${body_width}</wheelSeparation>
       <wheelDiameter>${2*wheel_radius}</wheelDiameter>
-      <torque>1</torque>
+      <torque>100</torque>
       <broadcastTF>1</broadcastTF>
       <odometryFrame>map</odometryFrame>
       <commandTopic>cmd_vel</commandTopic>
