@@ -6,7 +6,7 @@
   <xacro:property name="size_z" value="0.001"/>
   <xacro:property name="fovH" value="0.5236"/> <!--30 degree view angle-->
   <xacro:property name="range_min" value="0.050"/>
-  <xacro:property name="range_max" value="0.200"/>
+  <xacro:property name="range_max" value="5.00"/>
 
   <xacro:macro name="laelaps_laser" params="index parent translateX translateY translateZ yaw">
     <link name="laser_${index}">
@@ -44,7 +44,7 @@
           </scan>
           <range>
             <min>0.05</min>
-            <max>0.20</max>
+            <max>2.0</max>
             <resolution>0.01</resolution>
           </range>
           <noise>
@@ -54,8 +54,8 @@
           </noise>
         </ray>
         <plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_laser.so">
-          <topicName>/laelaps/laser/scan</topicName>
-          <frameName>hokuyo_link</frameName>
+          <topicName>/scan</topicName>
+          <frameName>laser_0</frameName>
         </plugin>
       </sensor>
     </gazebo>

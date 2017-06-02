@@ -8,7 +8,7 @@
   <!-- We resume the logic in empty_world.launch, changing only the name of 
     the world to be launched -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="worlds/empty.world" />
+    <arg name="world_name" value="$(find laelaps_gazebo)/worlds/laelaps_world.world" />
     <arg name="paused" value="$(arg paused)" />
     <arg name="debug" value="$(arg debug)" />
     <arg name="gui" value="$(arg gui)" />
@@ -22,4 +22,14 @@
   <!-- push robot_description to factory and spawn robot in gazebo -->
   <node name="laelaps_spawn" pkg="gazebo_ros" type="spawn_model" output="screen" 
     args="-urdf -param robot_description -model laelaps" />
+
+  <!-- start robot state publisher to publish TF frames -->
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+    <!--<remap from="robot_description" to="laelaps_robot_description"/>-->
+    <!--<remap from="joint_states" to="laelaps_joint_states" />-->
+  </node>
+  <node pkg="joint_state_publisher" type="joint_state_publisher" name="joint_state_publisher"/>
+  <param name="robot_description" command="$(find xacro)/xacro.py '$(find laelaps_description)/urdf/laelaps.xacro'" />
+
+
 </launch>
