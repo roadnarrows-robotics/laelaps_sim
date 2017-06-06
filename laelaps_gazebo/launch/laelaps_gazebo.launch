@@ -15,10 +15,7 @@
     <arg name="use_sim_time" value="true" />
     <arg name="headless" value="false" />
   </include>
- 
-  <!-- urdf xml robot description loaded on the Parameter Server-->
-  <param name="robot_description" command="$(find xacro)/xacro.py '$(find laelaps_description)/urdf/laelaps.xacro'" />
- 
+
   <!-- push robot_description to factory and spawn robot in gazebo -->
   <node name="laelaps_spawn" pkg="gazebo_ros" type="spawn_model" output="screen" 
     args="-urdf -param robot_description -model laelaps" />
@@ -30,6 +27,5 @@
   </node>
   <node pkg="joint_state_publisher" type="joint_state_publisher" name="joint_state_publisher"/>
   <param name="robot_description" command="$(find xacro)/xacro.py '$(find laelaps_description)/urdf/laelaps.xacro'" />
-
 
 </launch>
