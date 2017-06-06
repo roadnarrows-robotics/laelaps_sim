@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<robot name="laelaps_gps" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!-- constants -->
+  <xacro:property name="size_x" value="0.001"/>
+  <xacro:property name="size_y" value="0.001"/>
+  <xacro:property name="size_z" value="0.001"/>
+
+  <xacro:macro name="laelaps_gps" params="index parent translateX translateY translateZ yaw">
+    <link name="gps_${index}">
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="${size_x} ${size_y} ${size_z}"/>
+        </geometry>
+       </collision>
+       <visual>
+         <origin xyz="0 0 0" rpy="0 0 0"/>
+           <geometry>
+             <box size="${size_x} ${size_y} ${size_z}"/>
+           </geometry>
+       </visual>
+       <inertial>
+         <mass value="1e-5"/>
+         <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
+       </inertial>
+    </link>
+    <joint name="gps_joint_${index}" type="fixed">
+      <axis xyz="0 1 0"/>
+      <origin xyz="${translateX} ${translateY} ${translateZ}" rpy="0 0 ${yaw}"/>
+      <parent link="${parent}"/>
+      <child link="gps_${index}"/>
+    </joint>
+    <gazebo>
+      <plugin name="laelaps_gps_sim" filename="libhector_gazebo_ros_gps.so">
+        <alwaysOn>1</alwaysOn>
+        <updateRate>5.0</updateRate>
+        <topicName>/fix</topicName>
+        <frameName>gps_0</frameName>
+        <referenceLatitude>40.380810</referenceLatitude>
+        <referenceLongitude>-105.099604</referenceLongitude>
+      </plugin>
+    </gazebo>
+  </xacro:macro>  
+</robot>
+
