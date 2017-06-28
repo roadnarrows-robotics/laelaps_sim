@@ -34,11 +34,11 @@
     <gazebo>
       <plugin name="laelaps_gps_sim" filename="libhector_gazebo_ros_gps.so">
         <alwaysOn>1</alwaysOn>
-        <updateRate>5.0</updateRate>
+        <updateRate>1.0</updateRate>
         <topicName>/fix</topicName>
         <frameName>gps_0</frameName>
-        <referenceLatitude>0.0</referenceLatitude>
-        <referenceLongitude>0.0</referenceLongitude>
+        <referenceLatitude>40.3808827572</referenceLatitude>
+        <referenceLongitude>-105.099170503</referenceLongitude>
       </plugin>
     </gazebo>
   </xacro:macro>  

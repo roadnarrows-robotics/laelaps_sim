@@ -8,7 +8,8 @@
   <!-- We resume the logic in empty_world.launch, changing only the name of 
     the world to be launched -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(find laelaps_gazebo)/worlds/laelaps_world.world" />
+    <!-- Create new world WITHOUT laelaps in it... laelaps was saved/loaded from this world-->
+    <!--<arg name="world_name" value="$(find laelaps_gazebo)/worlds/laelaps_world.world" />-->
     <arg name="paused" value="$(arg paused)" />
     <arg name="debug" value="$(arg debug)" />
     <arg name="gui" value="$(arg gui)" />
