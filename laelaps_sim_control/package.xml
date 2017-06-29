@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package>
-  <name>laelaps_control</name>
+  <name>laelaps_sim_control</name>
   <version>0.0.0</version>
-  <description>The laelaps_control package</description>
+  <description>The laelaps_sim_control package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag --> 
   <!-- Example:  -->
